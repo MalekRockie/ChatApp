@@ -37,6 +37,17 @@ export default function AuthForm({ type, onSubmit }) {
                     {type === 'login' ? 'Sign In' : 'Sign Up'}
                 </button>
             </form>
+            <p className="text-center mt-4">
+                {type === 'login' ? (
+                    <a href="/register" className="text-brand hover:underline">
+                    Need an account? Register
+                    </a>
+                ) : (
+                    <a href="/login" className="text-brand hover:underline">
+                    Already have an account? Login
+                    </a>
+                )}
+            </p>
         </div>
     )
 }

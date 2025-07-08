@@ -1,6 +1,6 @@
 'use client'
 
-import AuthForm from '../AuthForm';
+import AuthForm from '../../components/auth/AuthForm';
 import supabase from '../../../lib/supabase';
 
 
@@ -12,7 +12,7 @@ export default function LoginPage() {
         });
         console.log("Login clicked");
         if (error) alert(error.message);
-        else window.location.href = "/";
+        else window.location.href = "/rooms";
     };
 
     return (

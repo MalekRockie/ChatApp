@@ -1,6 +1,6 @@
 'use client'
 
-import AuthForm from "../AuthForm";
+import AuthForm from "../../components/auth/AuthForm";
 import supabase from "@/lib/supabase";
 
 export default function RegisterPage() {
@@ -10,7 +10,11 @@ export default function RegisterPage() {
             password,
         });
         if (error) alert(error.message);
-        else alert('Should be good to login now!')
+        else
+        { 
+            alert('Should be good to login now!')
+            window.location.href = "/login";
+        }
     };
 
     return (
