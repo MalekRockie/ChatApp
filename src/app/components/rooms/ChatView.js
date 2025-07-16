@@ -7,7 +7,7 @@ import MessageInput from "./MessageInput"
 export default function ChatView({ initialMessages, roomId }) {
     const [messages, setMessages] = useState(initialMessages || []);
   
-
+    
     return (
       <div className="h-full flex flex-col">
         <div className="border-b p-4">
@@ -17,7 +17,7 @@ export default function ChatView({ initialMessages, roomId }) {
           messages={messages} 
           setMessages={setMessages} 
           roomId={roomId} 
-          onNewMessage={(newMsg) => setMessages(prev=> [...prev, newMsg])}
+          onNewMessages={(newMsg) => setMessages(prev=> [...prev, newMsg])}
         />
         <div className="p-4 border-t">
           <MessageInput 
