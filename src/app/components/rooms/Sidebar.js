@@ -54,9 +54,18 @@ export default function Sidebar() {
         return () => supabase.removeChannel(channel);
       }, []);
 
-    const handleLogout = async () => {
-        await supabase.auth.signOut();
-        router.push('/login');
+      const handleLogout = async () => {
+        try {
+            const { error } = await supabase.auth.signOut();
+            
+            if (error) {
+                console.error('Logout error:', error);
+            } else {
+                router.push('/login');
+            }
+        } catch (err) {
+            console.error('Unexpected error during logout:', err);
+        }
     };
 
     return (
