@@ -26,13 +26,33 @@ export default function MessageInput({ roomId }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
-      <input
-        type="text"
+    <form onSubmit={handleSubmit} className="flex gap-2 ">
+      <textarea
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        className="flex-1 p-2 border rounded"
+        className="flex-1 p-2 border rounded resize-none overflow-y-auto 
+                  scrollbar-thin scrollbar-track-transparent 
+                  scrollbar-thumb-transparent hover:scrollbar-thumb-gray-300 
+                  focus:scrollbar-thumb-gray-300"
+                  
         placeholder="Type your message..."
+        rows="1"
+        style={{
+          minHeight: '2.7rem',
+          maxHeight: '6rem'
+        }}
+        onInput={(e) => {
+          e.target.style.height = 'auto';
+          
+          const newHeight = Math.max(40, Math.min(e.target.scrollHeight, 96));
+          e.target.style.height = newHeight + 'px';
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && !e.shiftkey) {
+            e.preventDefault();
+            handleSubmit(e);
+          }
+        }}
       />
       <button
         type="submit"
