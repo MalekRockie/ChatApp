@@ -54,13 +54,35 @@ export default function MessageList({messages, roomId, onNewMessages}){
     console.log('Current messages state', messages);
 
     return(
-        <div className="flex-1 overflow-y-auto mb-4 space-y-2">
-            {messages?.map((message) => (
-                <div key={message.id} className={`p-2 border-b ${message.profiles?.user_id === user?.id ? ' flex flex-col items-end' : 'bg-black-100'}`}>
-                    <p className="font-medium">{message.profiles?.username || 'Anonymous'}</p>
-                    <p>{message.text}</p>
-                </div>
-            ))}
+        <div className="flex-1 overflow-y-auto mb-4 space-y-3 p-4 flex flex-col-reverse">
+            {messages?.slice().reverse().map((message) => {
+                const isCurrentUser = message.profiles?.user_id === user?.id;
+                
+                return (
+                    <div 
+                        key={message.id} 
+                        className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
+                    >
+                        <div className={`max-w-xs lg:max-w-md ${isCurrentUser ? 'order-2' : 'order-1'}`}>
+                            {!isCurrentUser && (
+                                <p className="text-xs text-gray-500 mb-1 px-3">
+                                    {message.profiles?.username || 'Anonymous'}
+                                </p>
+                            )}
+                            
+                            <div className={`
+                                px-4 py-2 rounded-2xl shadow-sm
+                                ${isCurrentUser 
+                                    ? 'bg-blue-500 text-white rounded-br-md' 
+                                    : 'bg-gray-100 text-gray-900 rounded-bl-md'
+                                }
+                            `}>
+                                <p className="text-sm">{message.text}</p>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })}
         </div>
     )
 }
