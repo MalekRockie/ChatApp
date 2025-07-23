@@ -6,7 +6,7 @@ export default async function RoomPage({ params }) {
 
     const { data: messages } = await supabase
       .from('messages')
-      .select('*, profiles(*)')
+      .select('*, profiles!fk_user (username, user_id, avatar_url)')
       .eq('room_id', params.roomId)
       .order('created_at', { ascending: true });
     console.log('Inintial messages fetch: ', messages);

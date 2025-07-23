@@ -18,9 +18,20 @@ export default function MessageList({messages, roomId, onNewMessages}){
                     table: 'messages',
                     filter: `room_id=eq.${roomId}`
                 },
-                (payload) => {
+                async (payload) => {
                     console.log('New message recieved', payload);
-                    onNewMessages(payload.new);
+                    // onNewMessages(payload.new);
+                    const {data: profile } = await supabase
+                        .from('profiles')
+                        .select('username, user_id, avatar_url')
+                        .eq('user_id', payload.new.user_id)
+                        .single()
+
+                    const messageWithProfile = {
+                        ...payload.new,
+                        profiles: profile
+                    };
+                    onNewMessages(messageWithProfile)
                 }
             )
             .subscribe();
