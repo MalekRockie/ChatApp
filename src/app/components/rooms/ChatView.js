@@ -9,10 +9,7 @@ export default function ChatView({ initialMessages, roomId }) {
   
     
     return (
-      <div className="h-full flex flex-col">
-        <div className="border-b p-4">
-          <h1 className="text-xl font-bold">Room Chat</h1>
-        </div>
+      <div className="h-full flex flex-col bg-neutral-900">
         <MessageList 
           messages={messages} 
           setMessages={setMessages} 
