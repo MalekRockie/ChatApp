@@ -8,36 +8,54 @@ export default function MessageList({messages, roomId, onNewMessages}){
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const channel = supabase
-            .channel(`messages:${roomId}`)
-            .on(
-                'postgres_changes',
-                {
-                    event: 'INSERT',
-                    schema: 'public',
-                    table: 'messages',
-                    filter: `room_id=eq.${roomId}`
-                },
-                async (payload) => {
-                    console.log('New message recieved', payload);
-                    // onNewMessages(payload.new);
-                    const {data: profile } = await supabase
-                        .from('profiles')
-                        .select('username, user_id, avatar_url')
-                        .eq('user_id', payload.new.user_id)
-                        .single()
+        let channel;
 
-                    const messageWithProfile = {
-                        ...payload.new,
-                        profiles: profile
-                    };
-                    onNewMessages(messageWithProfile)
-                }
-            )
-            .subscribe();
+        const setupSubscription = () => {
+            if (channel) {
+                supabase.removeChannel(channel);
+            }
+
+            channel = supabase
+                .channel(`messages:${roomId}`)
+                .on(
+                    'postgres_changes',
+                    {
+                        event: 'INSERT',
+                        schema: 'public',
+                        table: 'messages',
+                        filter: `room_id=eq.${roomId}`
+                    },
+                    async (payload) => {
+                        console.log('New message received', payload);
+                        
+                        const {data: profile } = await supabase
+                            .from('profiles')
+                            .select('username, user_id, avatar_url')
+                            .eq('user_id', payload.new.user_id)
+                            .single()
+
+                        const messageWithProfile = {
+                            ...payload.new,
+                            profiles: profile
+                        };
+                        onNewMessages(messageWithProfile)
+                    }
+                )
+                .subscribe((status) => {
+                    console.log('Subscription status:', status);
+                    if (status === 'CLOSED') {
+                        console.log("Connection closed, attempting to reconnect");
+                        setTimeout(setupSubscription, 1000);
+                    }
+                });
+        };
+
+            setupSubscription();
 
             return()=> {
-                supabase.removeChannel(channel);
+                if (channel){
+                    supabase.removeChannel(channel);
+                }
             };
     }, [roomId, onNewMessages]);
 
@@ -50,6 +68,7 @@ export default function MessageList({messages, roomId, onNewMessages}){
         
         fetchUser();
     }, []);
+
 
     console.log('Current messages state', messages);
 

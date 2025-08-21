@@ -10,17 +10,19 @@ export default function ChatView({ initialMessages, roomId }) {
     
     return (
       <div className="h-full flex flex-col bg-neutral-900">
-        <MessageList 
-          messages={messages} 
-          setMessages={setMessages} 
-          roomId={roomId} 
-          onNewMessages={(newMsg) => setMessages(prev=> [...prev, newMsg])}
-        />
-        <div className="p-4 border-t">
-          <MessageInput 
+        <div className="h-full flex flex-col w-5xl m-auto">
+            <MessageList 
+            messages={messages} 
+            setMessages={setMessages} 
             roomId={roomId} 
-            onSendSuccess={(newMsg) => setMessages(prev => [...prev, newMsg])} 
-          />
+            onNewMessages={(newMsg) => setMessages(prev=> [...prev, newMsg])}
+            />
+            <div className="p-4 border-t">
+            <MessageInput 
+                roomId={roomId} 
+                onSendSuccess={(newMsg) => setMessages(prev => [...prev, newMsg])} 
+            />
+            </div>
         </div>
       </div>
     );

@@ -33,7 +33,7 @@ export default function MessageInput({ roomId }) {
         className="flex-1 p-2 border rounded resize-none overflow-y-auto 
                   scrollbar-thin scrollbar-track-transparent 
                   scrollbar-thumb-transparent hover:scrollbar-thumb-gray-300 
-                  focus:scrollbar-thumb-gray-300"
+                  focus:scrollbar-thumb-gray-300 bg-neutral-800 w-xs text-white text-white"
                   
         placeholder="Type your message..."
         rows="1"

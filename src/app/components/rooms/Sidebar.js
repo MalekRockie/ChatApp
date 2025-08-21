@@ -101,18 +101,18 @@ export default function Sidebar() {
                         className="block p-3 mb-2 cursor-pointer rounded-lg hover:bg-slate-800 transition-colors border-transparent hover:border-blue-900"
                     >
                         {/* Room Name */}
-                        <div className='text-gray-300 mb-1'>
+                        <div className='text-gray-300 mb-1 truncate'>
                             {room.name}
                         </div>
                         
                         {/* Last Message Preview */}
                         {room.lastMessage ? (
-                            <div className='text-sm text-gray-400'>
-                                <span className='font-medium text-gray-400'>
+                            <div className='text-sm text-gray-400 flex items-center min-w-0'>
+                                <span className='font-medium text-gray-400 flex-shrink-0'>
                                     {room.lastMessage.profiles?.username || 'Anonymous'}
                                 </span>
-                                <span className='text-gray-500'>: </span>
-                                <span className='inline-block max-w-[180px]'>
+                                <span className='text-gray-500 flex-shrink-0'>:</span>
+                                <span className='truncate min-w-0 ml-1'>
                                     {room.lastMessage.text}
                                 </span>
                             </div>
