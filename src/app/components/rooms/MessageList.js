@@ -1,6 +1,6 @@
 'use client'
 
-import {useEffect, useState, useTransition} from 'react';
+import {useEffect, useRef, useState, useTransition} from 'react';
 import supabase from "@/lib/supabase";
 
 export default function MessageList({messages, roomId, onNewMessages}){
@@ -33,18 +33,22 @@ export default function MessageList({messages, roomId, onNewMessages}){
                             .select('username, user_id, avatar_url')
                             .eq('user_id', payload.new.user_id)
                             .single()
+                            .order('created_at', { ascending: true })
 
                         const messageWithProfile = {
                             ...payload.new,
-                            profiles: profile
+                            profiles: {
+                                user_id: payload.new.user_id
+                            }
                         };
-                        onNewMessages(messageWithProfile)
+                        onNewMessages(messageWithProfile);
+                        console.log(messageWithProfile);
                     }
                 )
                 .subscribe((status) => {
-                    console.log('Subscription status:', status);
+                    // console.log('Subscription status:', status);
                     if (status === 'CLOSED') {
-                        console.log("Connection closed, attempting to reconnect");
+                        // console.log("Connection closed, attempting to reconnect");
                         setTimeout(setupSubscription, 1000);
                     }
                 });
@@ -70,11 +74,11 @@ export default function MessageList({messages, roomId, onNewMessages}){
     }, []);
 
 
-    console.log('Current messages state', messages);
+    // console.log('Current messages state', messages);
 
     return(
-        <div className="flex-1 overflow-y-auto mb-4 space-y-3 p-4 flex flex-col-reverse">
-            {messages?.slice().reverse().map((message) => {
+        <div className="flex-1 overflow-y-auto mb-4 space-y-3 p-4 flex flex-col">
+            {messages?.slice().map((message) => {
                 const isCurrentUser = message.profiles?.user_id === user?.id;
                 
                 return (
