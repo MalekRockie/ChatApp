@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import supabase from '@/lib/supabase';
 
-export default function MessageInput({ roomId }) {
+export default function MessageInput({ roomId, onSendSuccess }) {
 
   const [message, setMessage] = useState('');
 
@@ -11,18 +11,31 @@ export default function MessageInput({ roomId }) {
     if (!message.trim()) return;
   
     const { data: { user } } = await supabase.auth.getUser();
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('messages')
       .insert({
         text: message,
         room_id: roomId,
         user_id: user.id
       })
-      .select('*, profiles(*)');
-      console.log("userId: ", user.id);
+      .select('*, profiles(*)')
+      .single();
   
-    if (error) alert(error.message);
-    else setMessage('');
+    if (error) {
+      alert(error.message);
+    } else {
+      const messageWithProfile = {
+        ...data,
+        profiles: {
+          user_id: data.user_id,
+          username: data.profiles?.username || 'Anonymous',
+          avatar_url: data.profiles?.avatar_url || null
+        }
+      };
+      
+      onSendSuccess(messageWithProfile);
+      setMessage('');
+    }
   };
 
   return (

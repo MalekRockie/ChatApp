@@ -3,9 +3,9 @@
 import {useEffect, useRef, useState, useTransition} from 'react';
 import supabase from "@/lib/supabase";
 
-export default function MessageList({messages, roomId, onNewMessages}){
+export default function MessageList({messages, roomId, onNewMessages, user}){
     // const [messages, setMessages] = useState(initialMessages);
-    const [user, setUser] = useState(null);
+    // const [user, setUser] = useState(null);
 
     useEffect(() => {
         let channel;
@@ -63,15 +63,15 @@ export default function MessageList({messages, roomId, onNewMessages}){
             };
     }, [roomId, onNewMessages]);
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            console.log('Current user here:', user);
-            setUser(user);
-        };
+    // useEffect(() => {
+    //     const fetchUser = async () => {
+    //         const { data: { user } } = await supabase.auth.getUser();
+    //         console.log('Current user here:', user);
+    //         setUser(user);
+    //     };
         
-        fetchUser();
-    }, []);
+    //     fetchUser();
+    // }, []);
 
 
     // console.log('Current messages state', messages);
