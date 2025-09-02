@@ -158,7 +158,7 @@ export default function Sidebar() {
                     <div className='absolute bottom-full left-4 right-4 text-sm bg-zinc-800 hover:bg-zinc-700  rounded-lg shadow-lg py-1'>
                         <button 
                             onClick={handleLogout}
-                            className='w-full text-left px-4 py-2 text-white-600 transition-colors cursor-pointer'
+                            className='w-full text-left px-4 py-2 text-white-600 transition-colors cursor-pointer text-white'
                         >
                             Log Out
                         </button>
